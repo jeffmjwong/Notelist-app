@@ -1,7 +1,7 @@
 require 'terminal-table'
 
 class Notelist
-  attr_reader :list
+  attr_accessor :list
   def initialize
     @list = []
   end
@@ -41,23 +41,24 @@ class Notelist
   def display_list
     table = Terminal::Table.new do |t|
       t.title = "Awesome Note List"
-      t.headings = ["Note Title", "Date"]
+      t.headings = ["Note Title", "Date Created"]
       if @list.empty?
         t.add_row ["", ""]
       else
-        @list.each do |item|
-          t.add_row [item[:title], item[:date]]
+        @list.each_with_index do |item, index|
+          t.add_row ["#{index + 1}. #{item[:title]}", item[:date]]
         end
       end
     end
     table.style = {
-      width: 200
+      width: 200,
+      alignment: :center
     }
     puts table
   end
 
   def put_space
-    3.times { puts "" }
+    2.times { puts "" }
   end
 end
 
@@ -73,8 +74,11 @@ if File.exist?("list.txt")
   notelist.list = Marshal.load File.read("list.txt")
 end
 notelist.display_list
-notelist.put_space
-puts "Your notelist is empty!" if notelist.list.empty?
+if notelist.list.empty?
+  notelist.put_space
+  puts "Your notelist is empty!"
+end
+
 loop do
   notelist.put_space
   puts "Please select the following action:\n'l' to show list\n'a' to add note\n'd' to delete note\n'r' to read note\n'q' to quit"
@@ -85,17 +89,22 @@ loop do
     notelist.put_space
     puts "Please enter the title of your note, or type 'b' to go back: "
     title = gets.chomp
-    if title == "b"
+    if title.downcase == "b"
       next
     end
-    date = Time.now
+    date = Time.now.strftime("%F %T")
     notelist.put_space
-    puts "Please enter the path of the file: "
+    puts "Please enter the full or relative path of the note file, or type 'b' to go back: "
     file_path = gets.chomp
+    if file_path.downcase == "b"
+      next
+    elsif !File.file?(file_path)
+      notelist.put_space
+      puts "The note file that you supplied does not exist! Please try again."
+      next
+    end
     note = {title: title, date: date, file_path: file_path}
-    puts note
     notelist.add_note(note)
-    puts notelist.list
     system "clear"
     notelist.put_space
     notelist.display_list
@@ -142,6 +151,13 @@ loop do
     system "clear"
     notelist.put_space
     notelist.read_note(number_index)
+
+  else
+    notelist.put_space
+    puts "That is not a valid option. Please try again."
+    next
   end
 
 end
+
+File.open("list.txt", "w") {|f| f.write(Marshal.dump(notelist.list))}
