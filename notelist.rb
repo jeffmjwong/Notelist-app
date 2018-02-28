@@ -39,26 +39,23 @@ class Notelist
   end
 
   def display_list
-    table = Terminal::Table.new
+    table = Terminal::Table.new do |t|
+      t.title = "Awesome Note List"
+      t.headings = ["Number Index", "Note Title", "Date Added"]
+      if list.empty?
+        t.add_row ["", "", ""]
+      else
+        list.each_with_index do |item, index|
+          t.add_row ["#{index + 1}", item[:title], item[:date]]
+        end
+      end
+    end
     table.style = {
       alignment: :center,
-      width: 200
+      width: 200,
+      border_x: "=",
+      border_i: "x"
     }
-    # table do |t|
-    #   t.title = "Awesome Note List"
-    #   t.headings = [{value: "Number Index", width: 50}, "Note Title", "Date Added"]
-    #   if list.empty?
-    #     t.add_row ["", "", ""]
-    #   else
-    #     list.each_with_index do |item, index|
-    #       t.add_row [
-    #         {value: "#{index + 1}", alignment: :center},
-    #         {value: item[:title], alignment: :center},
-    #         {value: item[:date], alignment: :center}
-    #       ]
-    #     end
-    #   end
-    # end
     puts table
   end
 
