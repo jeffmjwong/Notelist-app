@@ -15,10 +15,14 @@ class Notelist
   end
 
   def read_note(index_number_in_list)
+    puts "Note Start".center(200, "*")
+    put_space
     file = @list[index_number_in_list - 1][:file_path]
     File.open(file).each do |line|
       puts line
     end
+    put_space
+    puts "Note End".center(200, "*")
   end
 
   def display_title(title)
@@ -51,6 +55,10 @@ class Notelist
     }
     puts table
   end
+
+  def put_space
+    3.times { puts "" }
+  end
 end
 
 # running the following app
@@ -60,25 +68,28 @@ system "clear"
 notelist = Notelist.new
 
 notelist.display_title("Welcome to JeffChen Notelist!")
-3.times { puts "" }
+notelist.put_space
 if File.exist?("list.txt")
   notelist.list = Marshal.load File.read("list.txt")
 end
 notelist.display_list
-3.times { puts "" }
+notelist.put_space
 puts "Your notelist is empty!" if notelist.list.empty?
 loop do
-  3.times { puts "" }
-  print "Please select the following action: 'a' to add note, 'l' to show list, 'q' to quit, 'r' to read note "
+  notelist.put_space
+  puts "Please select the following action:\n'l' to show list\n'a' to add note\n'd' to delete note\n'r' to read note\n'q' to quit"
   user_input = gets.chomp.downcase
   case
 
   when user_input == "a"
-    3.times { puts "" }
-    puts "Please enter the title of your note: "
+    notelist.put_space
+    puts "Please enter the title of your note, or type 'b' to go back: "
     title = gets.chomp
+    if title == "b"
+      next
+    end
     date = Time.now
-    3.times { puts "" }
+    notelist.put_space
     puts "Please enter the path of the file: "
     file_path = gets.chomp
     note = {title: title, date: date, file_path: file_path}
@@ -86,58 +97,51 @@ loop do
     notelist.add_note(note)
     puts notelist.list
     system "clear"
+    notelist.put_space
     notelist.display_list
 
   when user_input == "d"
-    print "Please select the number index of note that you want to delete: "
-    user_input2 = gets.chomp.to_i
-    notelist.delete_note(user_input2)
     system "clear"
-    3.times { puts "" }
+    notelist.put_space
+    notelist.display_list
+    notelist.put_space
+    print "Please select the number index of note that you want to delete, or type 'b' to go back: "
+    number_index = gets.chomp.downcase
+    if number_index == "b"
+      next
+    end
+    number_index = number_index.to_i
+    notelist.delete_note(number_index)
+    system "clear"
+    notelist.put_space
     notelist.display_list
 
   when user_input == "q"
+    system "clear"
+    notelist.put_space
     puts "Thanks for using JeffChen Notelist. Have a nice day!"
+    notelist.put_space
     break
 
   when user_input == "l"
     system "clear"
-    3.times { puts "" }
+    notelist.put_space
     notelist.display_list
 
   when user_input == "r"
-    print "Please select the number index of note that you want to read: "
-    user_input2 = gets.chomp.to_i
     system "clear"
-    notelist.read_note(user_input2)
+    notelist.put_space
+    notelist.display_list
+    notelist.put_space
+    print "Please select the number index of the note that you want to read, or type 'b' to go back: "
+    number_index = gets.chomp.downcase
+    if number_index == "b"
+      next
+    end
+    number_index = number_index.to_i
+    system "clear"
+    notelist.put_space
+    notelist.read_note(number_index)
   end
 
 end
-
-
-
-
-# ruby = Notelist.new("Ruby Notes")
-# note1 = {
-#   title: "How to get input from user",
-#   file_name: "input.rb"
-# }
-# note2 = {
-#   title: "asdafsdf",
-#   file_name: "ctest.rb"
-# }
-# ruby.add_note(note1)
-# ruby.add_note(note2)
-# puts ruby.name
-# puts ruby.list
-# ruby.read_note(1)
-# ruby.delete_note(1)
-# puts ruby.list
-
-
-
-
-
-# File.open("input.rb").each do |line|
-#   puts line
-# end
