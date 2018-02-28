@@ -53,17 +53,16 @@ class Notelist
   end
 end
 
+# running the following app
+
 system "clear"
 
 notelist = Notelist.new
 
-# running the following app
 notelist.display_title("Welcome to JeffChen Notelist!")
 3.times { puts "" }
 if File.exist?("list.txt")
   notelist.list = Marshal.load File.read("list.txt")
-else
-  puts "wrong"
 end
 notelist.display_list
 3.times { puts "" }
@@ -78,15 +77,13 @@ loop do
     3.times { puts "" }
     puts "Please enter the title of your note: "
     title = gets.chomp
-    3.times { puts "" }
-    puts "Please enter the date: "
-    date = gets.chomp
+    date = Time.now
     3.times { puts "" }
     puts "Please enter the path of the file: "
     file_path = gets.chomp
     note = {title: title, date: date, file_path: file_path}
-    puts note1
-    notelist.add_note(note1)
+    puts note
+    notelist.add_note(note)
     puts notelist.list
     system "clear"
     notelist.display_list
@@ -96,6 +93,7 @@ loop do
     user_input2 = gets.chomp.to_i
     notelist.delete_note(user_input2)
     system "clear"
+    3.times { puts "" }
     notelist.display_list
 
   when user_input == "q"
@@ -104,6 +102,7 @@ loop do
 
   when user_input == "l"
     system "clear"
+    3.times { puts "" }
     notelist.display_list
 
   when user_input == "r"
