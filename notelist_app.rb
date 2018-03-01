@@ -1,11 +1,13 @@
 require 'terminal-table'
 require 'colorize'
+require 'tty-font'
 require_relative 'notelist_class.rb'
 
 system "clear"
 notelist = Notelist.new
+font = TTY::Font.new(:doom)
 
-notelist.display_title("Welcome to JeffChen Notelist!".colorize(color: :green))
+notelist.display_title(font.write("Welcome   To   Note   List!").colorize(color: :green))
 
 if File.exist?("list.txt")
   notelist.list = Marshal.load File.read("list.txt")
