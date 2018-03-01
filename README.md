@@ -48,4 +48,4 @@ functionalities of the note list app are:
 Follow the prompt to use the app and enjoy!
 
 ## Google Drive Link Address
-[https://docs.google.com/document/d/1Nwh81Ovimylg5KCRIIWq392VQ6RogBo0XpqengeJ6FY/edit?usp=sharing]
+https://docs.google.com/document/d/1Nwh81Ovimylg5KCRIIWq392VQ6RogBo0XpqengeJ6FY/edit?usp=sharing
