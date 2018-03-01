@@ -1,4 +1,5 @@
 require 'terminal-table'
+require 'colorize'
 
 class Notelist
   attr_accessor :list
@@ -15,14 +16,22 @@ class Notelist
   end
 
   def read_note(index_number_in_list)
-    puts "Note Start".center(200, "*")
-    put_space
     file = list[index_number_in_list - 1][:file_path]
-    File.open(file).each do |line|
-      puts line
+    if File.file?(file)
+      puts "Note Start".center(170, "*")
+      put_space
+      File.open(file).each do |line|
+        puts line
+      end
+      put_space
+      puts "Note End".center(170, "*")
+    else
+      put_space
+      puts "The note file that you are trying to read does not exist anymore. This note will now be deleted from the note list."
+      delete_note(index_number_in_list)
+      put_space
+      display_list
     end
-    put_space
-    puts "Note End".center(200, "*")
   end
 
   def display_title(title)
@@ -30,29 +39,29 @@ class Notelist
       t.add_row [title]
     end
     table.style = {
-      width: 200,
-      padding_left: 85,
-      border_x: "*",
-      border_i: "*"
+      width: 170,
+      alignment: :center,
+      border_x: "*".colorize(:yellow),
+      border_i: "*".colorize(:yellow)
     }
     puts table
   end
 
   def display_list
     table = Terminal::Table.new do |t|
-      t.title = "Awesome Note List"
+      t.title = "Awesome Note List".colorize(:red)
       t.headings = ["Number Index", "Note Title", "Date Added"]
       if list.empty?
         t.add_row ["", "", ""]
       else
         list.each_with_index do |item, index|
-          t.add_row ["#{index + 1}", item[:title], item[:date]]
+          t.add_row ["#{index + 1}".colorize(:blue), item[:title].colorize(:blue), item[:date].colorize(:blue)]
         end
       end
     end
     table.style = {
       alignment: :center,
-      width: 200,
+      width: 170,
       border_x: "=",
       border_i: "x"
     }
@@ -70,7 +79,7 @@ system "clear"
 
 notelist = Notelist.new
 
-notelist.display_title("Welcome to JeffChen Notelist!")
+notelist.display_title("Welcome to JeffChen Notelist!".colorize(color: :green))
 notelist.put_space
 if File.exist?("list.txt")
   notelist.list = Marshal.load File.read("list.txt")
