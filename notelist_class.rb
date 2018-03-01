@@ -28,7 +28,8 @@ class Notelist
       puts "Note End".center(155, "*")
     else
       put_space
-      puts "The note file that you are trying to read does not exist anymore. This note will now be deleted from the note list."
+      puts "The original path of the note file that you are trying to read does " +
+          "not exist anymore. This note will now be deleted from the note list."
       delete_note(index_number_in_list)
     end
   end
