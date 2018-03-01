@@ -21,5 +21,7 @@ ease.
 ## Approach
 To use the app, make sure `notelist_app.rb` and `notelist_class.rb` is in the
 same folder. Before running the app, make sure to install the following gems:
-`gem install terminal-table`
-`gem install colorize`
+```
+gem install terminal-table
+gem install colorize
+```
