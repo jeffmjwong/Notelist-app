@@ -1,3 +1,9 @@
 # Note List Terminal App
 
-**agsasgsdf**
+## Idea
+
+## Plan
+
+## Design
+
+## Approach
